@@ -1,0 +1,62 @@
+#IMPORTING MODULES
+import art
+import random
+cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+#ADD NEW CARDS
+def add_cards(my_list):
+    my_list.append(random.choice(cards))
+    if sum(my_list) > 21 and 11 in my_list:
+        my_list.remove(11)
+        my_list.append(1)
+        return my_list
+    else:
+        return my_list
+#ASKING IF YOU WANT TO DRAW ANOTHER CARD
+def ask_for_card():
+    return input("Type 'y' to get another card, type 'n' to pass: ").lower()
+#COMPARING CARDS AND ALSO COMPLETING THE COMPUTER'S HAND 
+def compare_cards(my_list_1, my_list_2):
+    while sum(my_list_2) < 17:
+        add_cards(my_list_2)
+    print(f"Computer's cards: {my_list_2}, Computer's total = {sum(my_list_2)}")
+    if sum(my_list_1) == 21 and len(my_list_1) == 2:
+        print("OMG! You got a BLACKJACK. You Win.")
+    elif (sum(my_list_2) > sum(my_list_1)) and (sum(my_list_2) <= 21):
+        print(f"You Lose😤! Because Your cards sum {sum(my_list_1)} is less than computer's cards sum {sum(my_list_2)}.")
+    elif (sum(my_list_2)) >21 and sum(my_list_1)<=21:
+        print(f"You Win🤑! Because Computer is busted because {sum(my_list_2)} is greater than 21.")
+    elif (sum(my_list_2)) == sum(my_list_1):
+        print(f"Its a draw🙄! You both got same total of {sum(my_list_1)}")
+    else:
+        print(f"You Win🤑! Because Your cards sum {sum(my_list_1)} is greater than computer's cards sum {sum(my_list_2)}.")
+    return None
+#MAIN PROJECT FUNCTION THAT ALLOWS A PLAYER TO PLAY WITH COMPUTER
+def play_blackjack_game():
+    print(art.logo)
+    user_card_list = [] #PLAYER'S CARD LIST
+    computer_card_list = [] #COMPUTER'S CARD LIST
+    for i in range(2):# ADDING INITIAL CARDS INTO LISTS
+        add_cards(user_card_list)
+        add_cards(computer_card_list)
+    print(f"Your cards: {user_card_list}, current total = {sum(user_card_list)}")
+    print(f"Computer's first card: {computer_card_list[0]}")
+    while sum(user_card_list)<21: #CHECKING IF PLAYER WANTS TO WITHDRAW MORE CARDS AS SUM IS STILL LESS THAN 21 
+        if ask_for_card() != 'y':# USING ask_for_card() FUNCTION TO VERIFY THE PLAYER'S ANSWER
+            break
+        add_cards(user_card_list)
+        print(f"Your cards: {user_card_list}, current total = {sum(user_card_list)}")
+    if sum(user_card_list)>21: # IF THE SUM GOES BEYOND 21, PLAYER IS BUSTED NO MATTER WHAT THE COMPUTER'S HAND IS.
+        print(f"You are Busted💣! Because Your cards sum {sum(user_card_list)} is greater than computer's cards sum {sum(computer_card_list)}.")
+
+    elif sum(user_card_list) <= 21: # SINCE USER'S CARD SUM IS LESS OR EQUAL TO 21, 
+        # WE EITHER HAVE TO MENTION THE WINNER BY COMPARING THE PLAYERS UNLESS THE PLAYER HAS 21 WITH ONLY TWO CARDS AND IT USES ONLY TWO CARDS
+        # ALL OF THIS LOGIC is present in compare cards
+        compare_cards(user_card_list, computer_card_list)
+
+play_blackjack = input("Do you want to play a game of Blackjack? Type 'y' for yes or 'n' for no: ").lower()
+while play_blackjack == "y":#LOOPING THE GAME BECAUSE WE HAVE INFINITE DECK WITH NO CARDS REMOVAL 
+    play_blackjack_game()
+    play_blackjack = input("Do you want to play another game of Blackjack? Type 'y' for yes or 'n' for no: ").lower()
+    print("\n" * 20)
+if play_blackjack != "y":
+    print("No worries. You can enjoy other games on the internet.")
