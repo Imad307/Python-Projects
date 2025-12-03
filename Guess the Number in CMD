@@ -6,44 +6,52 @@ my_logo = '''   _____                       _______ _            _   _          
  │ │__│ │ │_│ │  __╱╲__ ╲__ ╲    │ │  │ │ │ │  __╱ │ │╲  │ │_│ │ │ │ │ │ │ │_) │  __╱ │    
   ╲_____│╲__,_│╲___││___╱___╱    │_│  │_│ │_│╲___│ │_│ ╲_│╲__,_│_│ │_│ │_│_.__╱ ╲___│_│                                                                                                                                                                                           
 '''
-def play_again(y):
-    if y.lower() == "yes":
+def welcome():
+    print(my_logo)
+    print("Welcome to Guessing Game Number between 1 and 100!\nGuess it and you will save your family")
+def set_difficulty_level(diff_level):
+    if diff_level == "easy":
+        print("Easy Level! You have 10 attempts to win this game.")
+        attempts = 10
+    else:
+        print("Hard Level! You have 5 attempts to win this game.")
+        attempts = 5
+    return attempts
+def compare_number(attempts,cho_num):
+    guessing_num = 0
+    false_input_attempts = attempts
+    while guessing_num != cho_num and attempts != 0:
+        try:
+            guessing_num = int(input("Guess the number: "))
+            if guessing_num < cho_num:
+                attempts -= 1
+                print(f"Too Low📉!\nGuess again!⛔\nYou have left {attempts} attempts to guess the number!")
+            elif guessing_num > cho_num:
+                attempts -= 1
+                print(f"Too High📈!\nGuess again!⛔\nYou have left {attempts} attempts to guess the number!")
+            elif guessing_num == cho_num:
+                print(f"You got it. The number is {cho_num}.")
+            else:
+                print("Invalid input!")
+        except ValueError:
+            print("Give a valid input in numbers.")
+            false_input_attempts-=1
+            if false_input_attempts==0:
+                print("Too many failed False input types!")
+                break
+    if attempts == 0 and guessing_num != cho_num:
+        print("You have failed!😈")
+def guess_the_num(cho_num):
+    welcome()
+    difficulty_level = input("Choose your difficulty level by typing easy or hard: ").lower()
+    attempts = set_difficulty_level(difficulty_level)
+    compare_number(attempts, cho_num)
+    reloop_game = input("Do you want to play the game again, type yes or no: ")
+    if reloop_game == "yes" or "y":
         select_num = random.randint(1, 100)
         guess_the_num(select_num)
     else:
         print("No worries! There are lot of other games on the Internet.")
-def guess_the_num(cho_num):
-    print(my_logo)
-    print("Welcome to Guessing Game Number between 1 and 100!\nGuess it and you will save your family")
-    difficulty_level = input("Choose your difficulty level by typing easy or hard: ").lower()
-    if difficulty_level == "easy":
-        print("You have 10 attempts to win this game.")
-        attempts = 10
-    else:
-        print("You have 5 attempts to win this game.")
-        attempts = 5
-    result = True
-    while result == True and attempts!= 0:
-        guessing_num = int(input("Guess the number: "))
-        if guessing_num < cho_num:
-            attempts-=1
-            print(f"Too Low📉!\nGuess again!⛔\nYou have left {attempts} attempts to guess the number!")
-        elif guessing_num> cho_num:
-            attempts -= 1
-            print(f"Too High📈!\nGuess again!⛔\nYou have left {attempts} attempts to guess the number!")
-        elif guessing_num == cho_num:
-            print(f"You got it. The number is {cho_num}.")
-            result = False
-        else:
-            print("Invalid input!")
-            result = False
-    if attempts == 0 and guessing_num!=cho_num:
-        print("You have failed!😈")
-    reloop_game = input("Do you want to play the game again, type yes or no: ")
-    if reloop_game == "yes":
-        play_again(reloop_game)
-    else:
-        play_again(reloop_game)
 
 def main():
     chosen_num = random.randint(1, 100)
