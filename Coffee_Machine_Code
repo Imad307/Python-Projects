@@ -1,0 +1,90 @@
+MENU = {
+    "espresso": {
+        "ingredients": {
+            "water": 50,
+            "milk": 0,
+            "coffee": 18,
+        },
+        "cost": 1.5,
+    },
+    "latte": {
+        "ingredients": {
+            "water": 200,
+            "milk": 150,
+            "coffee": 24,
+        },
+        "cost": 2.5,
+    },
+    "cappuccino": {
+        "ingredients": {
+            "water": 250,
+            "milk": 100,
+            "coffee": 24,
+        },
+        "cost": 3.0,
+    }
+}
+
+resources = {
+    "water": 300,
+    "milk": 200,
+    "coffee": 100,
+    "money": 0
+}
+
+def resource_check(user_inp, total_money):
+    if user_inp in MENU:
+        if total_money> MENU[user_inp]["cost"]:
+            ingredients = MENU[user_inp]["ingredients"]
+            for item, required_amount in ingredients.items():
+                if resources[item] < required_amount:
+                    print(f"Sorry the {item} is not enough.")
+                    return False
+            return True
+        else:
+            print("Sorry that's not enough money. Money refunded.")
+            return False
+    else:
+        print("Invalid Input!")
+        return False
+def resource_maintenance(user_inp, total_money):
+    total_money -= MENU[user_inp]["cost"]
+    resources["money"] += MENU[user_inp]["cost"]
+    if total_money != 0:
+        print(f"Take your change of {total_money} back.\nThanks for buying {user_inp}.")
+def make_coffee(user_inp, total_money):
+    if resource_check(user_inp, total_money):
+        ingredients = MENU[user_inp]["ingredients"]
+        for item, required_amount in ingredients.items():
+            resources[item] -= ingredients[item]
+        print(f"Here is your {user_inp}. Enjoy!")
+        resource_maintenance(user_inp, total_money)
+def get_money():
+    print("Please insert the money!")
+    while True:
+        try:
+            quarter = int(input("How many quarters($0.25): "))
+            dimes = int(input("How many dimes($0.10): "))
+            nickles = int(input("How many nickles($0.05): "))
+            pennies = int(input("How many pennies($0.01): "))
+            total_money = (quarter * 0.25) + (dimes * 0.10) + (nickles * 0.05) + (pennies * 0.01)
+            return total_money
+        except ValueError:
+            print("We only take coins. Nothing else. Please insert coins.")
+
+def coffee_machine():
+    coffee_machine_running = True
+    while coffee_machine_running:
+        user_input = input("What would you like? \nespresso\nlatte\ncappuccino\nType here: ")
+        if user_input == "report":
+            print(resources)
+        elif user_input =="off":
+            coffee_machine_running = False
+            print("Machine Shutting Off!")
+            return
+        else:
+            total_money = get_money()
+            print(f"You gave:{total_money}")
+            make_coffee(user_input, total_money)
+coffee_machine()
+
